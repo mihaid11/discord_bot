@@ -24,6 +24,7 @@ import code         # code.interact
 import os           # environment variables
 import inspect      # call stack inspection
 import random       # dumb random number generator
+import argparse
 
 from discord.ext import commands    # Bot class and utils
 
@@ -71,6 +72,18 @@ def log_msg(msg: str, level: str):
 ################################################################################
 ############################## BOT IMPLEMENTATION ##############################
 ################################################################################
+def get_token():
+    parser = argparse.ArgumentParser(description="Discord Music Bot")
+    parser.add_argument(
+        "-t", "--token", type=str, help="Discord bot token (optional if environment variable is set)"
+    )
+    args = parser.parse_args()
+    
+    # Use command-line token or fallback to environment variable
+    token = args.token or os.getenv("DISCORD_TOKEN")
+    if not token:
+        raise ValueError("No bot token provided. Use -t or set the DISCORD_TOKEN environment variable.")
+    return token
 
 # bot instantiation
 intents = discord.Intents.all()
